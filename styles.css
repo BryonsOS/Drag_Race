@@ -1,160 +1,145 @@
-:root {
-  --bg: #090b12;
-  --panel: #111625;
-  --panel-2: #171d2d;
-  --line: rgba(255,255,255,.08);
-  --text: #f6f7fb;
-  --muted: #a4aec5;
-  --accent: #ff6a1c;
-  --accent-2: #ffc24b;
-  --good: #39da76;
-  --bad: #ff4d4f;
-  --shadow: 0 18px 50px rgba(0,0,0,.35);
-  --safe-bottom: max(14px, env(safe-area-inset-bottom));
-}
-* { box-sizing: border-box; }
-html, body { margin: 0; min-height: 100%; background: radial-gradient(circle at top, #1a2034 0%, var(--bg) 54%); color: var(--text); font-family: Inter, Arial, sans-serif; }
-body { display: flex; justify-content: center; }
-button { font: inherit; }
-.app-shell { width: 100%; display: flex; justify-content: center; padding: 10px 10px calc(var(--safe-bottom) + 12px); }
-.game-card {
-  width: min(100%, 460px);
-  background: linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
-  border: 1px solid var(--line);
-  border-radius: 24px;
-  box-shadow: var(--shadow);
-  overflow: hidden;
-}
-.topbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 12px;
-  padding: 14px 14px 10px;
-}
-.eyebrow { margin: 0 0 2px; color: var(--accent-2); font-size: .74rem; text-transform: uppercase; letter-spacing: .14em; }
-.topbar h1 { margin: 0; font-size: 1.25rem; }
-.ghost-btn {
-  background: rgba(255,255,255,.06); color: var(--text); border: 1px solid var(--line);
-  border-radius: 999px; padding: 10px 14px;
-}
-.scene-wrap { padding: 0 10px 10px; }
-.scene {
-  position: relative; width: 100%; aspect-ratio: 9 / 12; border-radius: 22px; overflow: hidden;
-  background: linear-gradient(180deg, #63a2e4 0%, #b6d7ff 26%, #6b7690 28%, #262d38 32%, #1e222b 100%);
-  border: 1px solid rgba(255,255,255,.08);
-}
-.sky { position:absolute; inset:0 0 55% 0; background: linear-gradient(180deg,#4c97db 0%,#9dcdff 100%); }
-.horizon-glow { position:absolute; left:50%; top:31%; transform:translateX(-50%); width:42%; height:5%; background: radial-gradient(circle, rgba(255,201,101,.75), rgba(255,201,101,0)); }
-.grandstand { position:absolute; top:24%; width:26%; height:10%; background: linear-gradient(180deg, #444d5d, #1f2430); opacity:.9; }
-.grandstand.left { left:2%; clip-path: polygon(0 100%,100% 70%,100% 100%,0 100%); }
-.grandstand.right { right:2%; clip-path: polygon(0 70%,100% 100%,100% 100%,0 100%); }
-.trackside-barrier { position:absolute; top:35%; width:18%; height:3%; background:#d9dde6; opacity:.85; }
-.trackside-barrier.left { left:0; transform: skewY(-12deg); }
-.trackside-barrier.right { right:0; transform: skewY(12deg); }
-.scoreboard { position:absolute; top:22%; width:6%; height:11%; background:#13161f; border:1px solid rgba(255,255,255,.1); }
-.scoreboard::before { content:""; position:absolute; inset:10% 20%; background: repeating-linear-gradient(180deg,#ff9438 0 8%,transparent 8% 18%); opacity:.9; }
-.scoreboard.left { left:8%; }
-.scoreboard.right { right:8%; }
-.tree-zone { position:absolute; left:50%; top:24%; width:18%; height:22%; transform: translateX(-50%); z-index: 8; }
-.christmas-tree { position:relative; width:100%; height:100%; }
-.tree-post { position:absolute; left:50%; transform:translateX(-50%); width:12%; height:88%; bottom:0; background:linear-gradient(180deg,#2f343f,#0d0f14); border-radius:999px; }
-.tree-cap { position:absolute; left:50%; transform:translateX(-50%); top:1%; width:28%; height:8%; background:#0f131c; border-radius:999px; }
-.lamp { position:absolute; left:50%; transform:translateX(-50%); width:18%; aspect-ratio:1; border-radius:50%; background:#2b2f37; box-shadow: inset 0 0 0 2px rgba(0,0,0,.35); }
-.pre{ top:10%; background:#d8f0ff; box-shadow:0 0 12px rgba(216,240,255,.85);} .stage{ top:19%; background:#d8f0ff; box-shadow:0 0 12px rgba(216,240,255,.85);} 
-.red-1{top:31%;}.red-2{top:40%;}.red-3{top:49%;}
-.amber-1{top:61%;}.amber-2{top:70%;}.green{top:82%;}
-.lamp.active.red { background:#ff4747; box-shadow:0 0 16px rgba(255,71,71,.95); }
-.lamp.active.amber { background:#ffc14d; box-shadow:0 0 16px rgba(255,193,77,.95); }
-.lamp.active.green { background:#36df73; box-shadow:0 0 16px rgba(54,223,115,.95); }
-.sponsor-board {
-  position:absolute; right:4%; top:38%; width:22%; background:rgba(10,12,18,.85);
-  border:1px solid rgba(255,255,255,.08); border-radius:12px; padding:7px; z-index:7; text-align:center;
-}
-.sponsor-board img { width:100%; display:block; border-radius:8px; }
-.sponsor-board span { display:block; margin-top:5px; font-size:.65rem; color:var(--muted); text-transform:uppercase; letter-spacing:.08em; }
-.center-strip { position:absolute; inset:48% 49.2% 0; background:linear-gradient(180deg,#ffef93 0 18%,rgba(255,239,147,0) 30% 100%); opacity:.75; }
-.lane-markers { position:absolute; left:33.8%; top:49%; width:2.1%; height:48%; background:repeating-linear-gradient(180deg,#fff 0 8%,transparent 8% 16%); opacity:.9; transform: perspective(500px) rotateX(72deg); transform-origin: top center; }
-.lane-markers-right { left:auto; right:33.8%; }
-.rubber-line { position:absolute; top:48%; width:4%; height:50%; background:linear-gradient(180deg, rgba(20,20,20,.75), rgba(10,10,10,.15)); filter: blur(1px); }
-.rubber-line.left { left:43%; transform: perspective(500px) rotateX(72deg); transform-origin: top center; }
-.rubber-line.right { right:43%; transform: perspective(500px) rotateX(72deg); transform-origin: top center; }
-.cockpit { position:absolute; inset:0; z-index:10; pointer-events:none; }
-.windshield-frame { position:absolute; background:linear-gradient(180deg,#0d1018,#1e2431); box-shadow: inset 0 0 0 1px rgba(255,255,255,.05); }
-.windshield-frame.top { top:0; left:0; right:0; height:9%; }
-.windshield-frame.left { left:0; top:0; bottom:20%; width:12%; transform: skewX(-10deg); transform-origin:left top; }
-.windshield-frame.right { right:0; top:0; bottom:20%; width:12%; transform: skewX(10deg); transform-origin:right top; }
-.dashboard {
-  position:absolute; left:3%; right:3%; bottom:0; height:31%; border-radius:26px 26px 0 0;
-  background: linear-gradient(180deg,#1a2230 0%,#10151f 100%); border-top:1px solid rgba(255,255,255,.08);
-  box-shadow: 0 -18px 40px rgba(0,0,0,.45);
-  padding: 12px 12px 10px;
-}
-.gauge-cluster {
-  display:grid; grid-template-columns: 1fr 1.2fr 1fr; gap:8px; align-items:start;
-}
-.gauge { background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.08); border-radius: 16px; padding: 8px; min-height: 84px; }
-.gauge-label, .status-label { display:block; color:var(--muted); font-size:.66rem; text-transform:uppercase; letter-spacing:.1em; margin-bottom:6px; }
-.gauge-face {
-  width:100%; aspect-ratio:1 / 1; max-width:70px; margin:0 auto; border-radius:50%; border:2px solid rgba(255,255,255,.16);
-  position:relative; background: radial-gradient(circle, #11141c 45%, #05070b 100%);
-}
-.needle { position:absolute; width:40%; height:3px; background:var(--accent); top:50%; left:50%; transform-origin:0 50%; transform: rotate(-110deg); border-radius:999px; }
-.status-screen {
-  min-height: 68px; border-radius: 12px; background:#091019; border:1px solid rgba(84,255,167,.18);
-  color:#b6ffd1; padding:10px; line-height:1.25; font-size:.84rem; display:flex; align-items:center; justify-content:center; text-align:center;
-}
-.reaction-display {
-  font-size: 1.05rem; font-weight: 700; min-height:68px; display:flex; align-items:center; justify-content:center;
-  border-radius:12px; background:#0f1218; border:1px solid rgba(255,255,255,.08);
-}
-.steering-wheel {
-  position:absolute; left:50%; bottom:8px; transform:translateX(-50%); width:36%; max-width:136px; aspect-ratio:1 / 1;
-  border:8px solid #05070a; border-radius:50%; opacity:.9;
-}
-.steering-wheel::before, .steering-wheel::after {
-  content:""; position:absolute; background:#05070a; left:50%; top:50%; transform:translate(-50%,-50%);
-}
-.steering-wheel::before { width:16%; height:52%; }
-.steering-wheel::after { width:56%; height:12%; }
-.hood-edge {
-  position:absolute; left:22%; right:22%; bottom:27%; height:4%; background:linear-gradient(180deg,rgba(255,255,255,.24),rgba(255,255,255,0));
-  border-radius:999px 999px 0 0; opacity:.65;
-}
-.controls-panel { padding: 0 12px 14px; display:grid; gap:12px; }
-.primary-actions { display:grid; grid-template-columns: 1fr; gap:10px; }
-.main-btn, .launch-btn, .view-btn {
-  border:none; border-radius:16px; padding:14px 14px; font-weight:700;
-}
-.main-btn { background: linear-gradient(180deg, #ff8d45, var(--accent)); color:white; box-shadow: 0 10px 24px rgba(255,106,28,.35); }
-.launch-btn { background:#e8edf9; color:#10151f; }
-.launch-btn.ready { background: linear-gradient(180deg,#ffe28b,#ffbf41); }
-.launch-btn.go { background: linear-gradient(180deg,#7cf2a7,#26c95f); color:#062111; }
-.launch-btn.foul { background: linear-gradient(180deg,#ff8c8d,#ff4d4f); color:white; }
-.view-panel, .stats-grid { background: rgba(255,255,255,.03); border:1px solid rgba(255,255,255,.08); border-radius:18px; }
-.view-panel { padding:10px; }
-.panel-label { display:block; color:var(--muted); font-size:.72rem; text-transform:uppercase; letter-spacing:.1em; margin-bottom:8px; }
-.view-buttons { display:grid; grid-template-columns: repeat(3, 1fr); gap:8px; }
-.view-btn { background:#22293a; color:#d9def0; padding:12px 8px; }
-.view-btn.active { background: var(--accent); color:white; }
-.stats-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; padding:10px; }
-.stat-box { background:#141a27; border-radius:14px; padding:10px 8px; text-align:center; }
-.stat-label { display:block; font-size:.7rem; color:var(--muted); margin-bottom:6px; text-transform:uppercase; letter-spacing:.08em; }
-.stat-box strong { font-size:.9rem; }
-.scene.view-dash .dashboard { height:24%; }
-.scene.view-dash .hood-edge { bottom:23%; }
-.scene.view-dash .tree-zone { top:21%; }
-.scene.view-dash .sponsor-board { top:34%; width:20%; }
-.scene.view-hood .dashboard { height:22%; }
-.scene.view-hood .steering-wheel { opacity:.35; width:26%; }
-.scene.view-hood .tree-zone { top:20%; transform:translateX(-50%) scale(1.08); }
-.scene.view-hood .hood-edge { left:14%; right:14%; bottom:21%; height:6%; opacity:.9; }
-.scene.view-hood .windshield-frame.top { height:7%; }
-.scene.view-windshield .dashboard { height:31%; }
-@media (min-width: 480px) {
-  .app-shell { padding-top: 18px; }
-  .game-card { width:min(100%, 500px); }
-  .topbar h1 { font-size:1.4rem; }
-  .primary-actions { grid-template-columns: 1fr 1.2fr; }
-  .main-btn, .launch-btn { min-height: 56px; }
-}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#0a0f19" />
+  <title>Street Launch Reaction</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">Arcade Drag Reaction</p>
+        <h1>Street Launch</h1>
+      </div>
+      <div class="pill result-pill" id="resultPill">Stage up</div>
+    </header>
+
+    <main class="game-card">
+      <section class="race-scene view-windshield" id="raceScene" aria-label="Drag strip game view">
+        <div class="sky-glow"></div>
+        <div class="horizon-glow"></div>
+        <div class="crowd crowd-left"></div>
+        <div class="crowd crowd-right"></div>
+        <div class="scoreboard left-board"></div>
+        <div class="scoreboard right-board"></div>
+        <div class="sponsor-sign left-sign">
+          <img src="assets/sick-logo.jpeg" alt="Sick The Magazine sponsor logo" />
+        </div>
+        <div class="sponsor-sign right-sign">
+          <span>Presented by</span>
+          <strong>Sick The Magazine</strong>
+        </div>
+
+        <div class="track"></div>
+        <div class="lane lane-left"></div>
+        <div class="lane lane-right"></div>
+        <div class="lane-reflect"></div>
+        <div class="rumble rumble-left"></div>
+        <div class="rumble rumble-right"></div>
+
+        <div class="tree-wrap">
+          <div class="tree-stand"></div>
+          <div class="tree-body">
+            <div class="bulb small prestage" id="prestageBulb"></div>
+            <div class="bulb small stage" id="stageBulb"></div>
+            <div class="bulb red" id="red1"></div>
+            <div class="bulb red" id="red2"></div>
+            <div class="bulb red" id="red3"></div>
+            <div class="bulb yellow" id="yellow1"></div>
+            <div class="bulb yellow" id="yellow2"></div>
+            <div class="bulb green" id="green"></div>
+            <div class="bulb red foul" id="foul"></div>
+          </div>
+        </div>
+
+        <div class="opponent-lane">
+          <div class="car opponent" id="opponentCar">
+            <div class="car-shadow"></div>
+            <div class="car-body"></div>
+            <div class="car-window"></div>
+            <div class="car-light"></div>
+            <div class="wheel front"></div>
+            <div class="wheel rear"></div>
+          </div>
+        </div>
+
+        <div class="player-lane">
+          <div class="player-cue" id="playerCue"></div>
+        </div>
+
+        <div class="windshield-frame frame-top"></div>
+        <div class="windshield-frame frame-left"></div>
+        <div class="windshield-frame frame-right"></div>
+        <div class="hood" id="hood"></div>
+
+        <div class="dashboard" id="dashboard">
+          <div class="cluster tach-cluster">
+            <svg viewBox="0 0 120 80" class="gauge-svg">
+              <path d="M15 65 A45 45 0 0 1 105 65" class="gauge-track" />
+              <path d="M15 65 A45 45 0 0 1 105 65" class="gauge-fill" id="tachArc" />
+              <line x1="60" y1="65" x2="34" y2="35" class="needle" id="tachNeedle" />
+              <circle cx="60" cy="65" r="4" class="hub" />
+            </svg>
+            <div class="gauge-label">RPM</div>
+          </div>
+          <div class="center-cluster">
+            <div class="shift-light" id="shiftLight"></div>
+            <div class="dash-message" id="dashMessage">Tap <span>Launch</span> when green</div>
+          </div>
+          <div class="cluster speed-cluster">
+            <svg viewBox="0 0 120 80" class="gauge-svg">
+              <path d="M15 65 A45 45 0 0 1 105 65" class="gauge-track" />
+              <path d="M15 65 A45 45 0 0 1 105 65" class="gauge-fill" id="speedArc" />
+              <line x1="60" y1="65" x2="83" y2="34" class="needle" id="speedNeedle" />
+              <circle cx="60" cy="65" r="4" class="hub" />
+            </svg>
+            <div class="gauge-label">MPH</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="controls-panel">
+        <div class="primary-actions">
+          <button id="launchButton" class="launch-btn">Launch</button>
+          <button id="resetButton" class="secondary-btn">Restage</button>
+        </div>
+
+        <div class="view-buttons" role="group" aria-label="Select camera view">
+          <button class="view-btn active" data-view="windshield">Windshield</button>
+          <button class="view-btn" data-view="dash">Dash</button>
+          <button class="view-btn" data-view="hood">Hood</button>
+        </div>
+
+        <div class="stats-grid">
+          <article class="stat-card"><span>Last</span><strong id="lastReaction">--</strong></article>
+          <article class="stat-card"><span>Best</span><strong id="bestReaction">--</strong></article>
+          <article class="stat-card"><span>Avg</span><strong id="avgReaction">--</strong></article>
+          <article class="stat-card"><span>Wins</span><strong id="winCount">0</strong></article>
+        </div>
+
+        <div class="opponent-bar-wrap">
+          <div class="opponent-meta">
+            <span>Opponent light</span>
+            <strong id="opponentReaction">.---</strong>
+          </div>
+          <div class="race-bars">
+            <div class="bar-row">
+              <span>You</span>
+              <div class="bar-track"><div class="bar-fill player-fill" id="playerBar"></div></div>
+            </div>
+            <div class="bar-row">
+              <span>Other lane</span>
+              <div class="bar-track"><div class="bar-fill opponent-fill" id="opponentBar"></div></div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
