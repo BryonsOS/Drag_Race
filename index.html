@@ -3,21 +3,25 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Sick Off The Line V3 - a drag strip reaction time web game built for GitHub upload and static hosting." />
-  <title>Sick Off The Line V3</title>
+  <meta name="description" content="Sick Off The Line V4 - drag strip reaction time game with improved camera views." />
+  <title>Sick Off The Line V4</title>
   <link rel="stylesheet" href="css/styles.css" />
 </head>
 <body>
-  <main class="game-shell" id="game" aria-label="Sick Off The Line reaction time game">
-    <section class="scene">
+  <main class="game-shell" aria-label="Sick Off The Line reaction time game">
+    <section class="scene view-cockpit" id="scene">
       <div class="sky"></div>
       <div class="sun-glow"></div>
       <div class="horizon-glow"></div>
       <div class="mountains"></div>
       <div class="stands left"></div>
       <div class="stands right"></div>
+      <div class="track-cars car-left"></div>
+      <div class="track-cars car-right"></div>
+      <div class="billboard left"></div>
+      <div class="billboard right"></div>
 
-      <div class="track">
+      <div class="track" id="track">
         <div class="guardrail left-wall"></div>
         <div class="guardrail right-wall"></div>
         <div class="lane left-lane"></div>
@@ -32,9 +36,11 @@
         <div class="motion-lines motion-right"></div>
         <div class="cone left-cone"></div>
         <div class="cone right-cone"></div>
+        <div class="rubber-mark left-mark"></div>
+        <div class="rubber-mark right-mark"></div>
         <div class="timing-board left-board">
           <span>RT</span>
-          <strong id="leftBoard">.--- </strong>
+          <strong id="leftBoard">.---</strong>
         </div>
         <div class="timing-board right-board">
           <span>MPH</span>
@@ -42,7 +48,7 @@
         </div>
       </div>
 
-      <div class="tree-zone">
+      <div class="tree-zone" id="treeZone">
         <div class="tree-sign">Christmas Tree</div>
         <div class="tree-post">
           <div class="tree-lights">
@@ -72,8 +78,8 @@
       <section class="hud">
         <div class="brand panel">
           <span class="eyebrow">Driver View</span>
-          <h1>Sick Off The Line <span>V3</span></h1>
-          <p>Street car cockpit view. Cut a light and chase your best reaction.</p>
+          <h1>Sick Off The Line <span>V4</span></h1>
+          <p>Pick a better camera angle, watch the tree, and leave on green.</p>
         </div>
 
         <div class="stats panel-grid">
@@ -96,17 +102,30 @@
         </div>
       </section>
 
+      <section class="view-picker panel" aria-label="Camera view picker">
+        <span class="picker-label">View</span>
+        <div class="view-buttons" id="viewButtons">
+          <button class="view-btn active" data-view="cockpit">Cockpit</button>
+          <button class="view-btn" data-view="dash">Dash</button>
+          <button class="view-btn" data-view="wide">Wide</button>
+        </div>
+      </section>
+
       <div class="cockpit-frame top"></div>
       <div class="cockpit-frame left"></div>
       <div class="cockpit-frame right"></div>
 
-      <section class="dashboard">
+      <section class="dashboard" id="dashboard">
         <div class="windshield-reflection"></div>
         <div class="dash-top-strip"></div>
+        <div class="rearview-mirror"></div>
+        <div class="a-pillar left"></div>
+        <div class="a-pillar right"></div>
+        <div class="hood-bulge"></div>
 
         <div class="gauge cluster-left">
           <div class="gauge-title">RPM</div>
-          <div class="gauge-dial" id="rpmDial">
+          <div class="gauge-dial">
             <div class="needle" id="rpmNeedle"></div>
           </div>
           <div class="gauge-readout" id="rpmValue">3200</div>
@@ -130,7 +149,7 @@
 
         <div class="gauge cluster-right">
           <div class="gauge-title">MPH</div>
-          <div class="gauge-dial" id="mphDial">
+          <div class="gauge-dial">
             <div class="needle" id="mphNeedle"></div>
           </div>
           <div class="gauge-readout" id="mphValue">0</div>

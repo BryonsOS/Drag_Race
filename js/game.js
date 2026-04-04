@@ -1,9 +1,10 @@
-const scene = document.querySelector('.scene');
+const scene = document.getElementById('scene');
 const headline = document.getElementById('headline');
 const subline = document.getElementById('subline');
 const rating = document.getElementById('rating');
 const launchMode = document.getElementById('launchMode');
 const actionButton = document.getElementById('actionButton');
+const viewButtons = document.querySelectorAll('.view-btn');
 
 const lastReactionEl = document.getElementById('lastReaction');
 const bestReactionEl = document.getElementById('bestReaction');
@@ -27,7 +28,8 @@ const lights = {
   g: document.querySelector('[data-light="g"]'),
 };
 
-const STORAGE_KEY = 'sick-off-the-line-v2-stats';
+const STORAGE_KEY = 'sick-off-the-line-v4-stats';
+const VIEW_KEY = 'sick-off-the-line-v4-view';
 let state = 'idle';
 let timeouts = [];
 let greenAt = null;
@@ -86,7 +88,7 @@ function setNeedle(el, percent) {
 }
 
 function setCockpit(rpm, mph) {
-  const rpmPercent = Math.min(Math.max((rpm - 0) / 8000, 0), 1);
+  const rpmPercent = Math.min(Math.max(rpm / 8000, 0), 1);
   const mphPercent = Math.min(Math.max(mph / 160, 0), 1);
   setNeedle(rpmNeedle, rpmPercent);
   setNeedle(mphNeedle, mphPercent);
@@ -124,8 +126,7 @@ function formatReaction(seconds) {
 
 function averageReaction() {
   if (!stats.runs.length) return null;
-  const sum = stats.runs.reduce((acc, value) => acc + value, 0);
-  return sum / stats.runs.length;
+  return stats.runs.reduce((acc, value) => acc + value, 0) / stats.runs.length;
 }
 
 function bestReaction() {
@@ -191,7 +192,6 @@ function stageSequence() {
   setCockpit(3400, 0);
   setMessage('Stage Deep', 'Watch the tree drop. Hit it on green.', 'Race Ready');
   updateBoards('.---', '000');
-
   stageLampsOn();
 
   const base = 700 + Math.random() * 900;
@@ -264,9 +264,9 @@ function finishRun() {
   const best = bestReaction();
   const label = scoreLabel(reaction);
   const isBest = best !== null && Math.abs(best - reaction) < 0.0005;
+  const mph = String(Math.max(18, Math.min(42, Math.round(28 + (0.24 - Math.min(reaction, 0.24)) * 140))));
 
-  updateBoards(formatReaction(reaction), String(Math.max(18, Math.min(42, Math.round(28 + (0.24 - Math.min(reaction, 0.24)) * 140)))));
-
+  updateBoards(formatReaction(reaction), mph);
   setMessage(
     isBest ? 'New Best' : 'Nice Leave',
     `Reaction: ${formatReaction(reaction)}. ${isBest ? 'Fastest run yet.' : 'Tap to run it back.'}`,
@@ -275,6 +275,15 @@ function finishRun() {
 
   animateLaunch();
   schedule(() => startIdleGaugeAnimation(), 620);
+}
+
+function setView(view) {
+  const allowed = ['cockpit', 'dash', 'wide'];
+  const nextView = allowed.includes(view) ? view : 'cockpit';
+  scene.classList.remove('view-cockpit', 'view-dash', 'view-wide');
+  scene.classList.add(`view-${nextView}`);
+  viewButtons.forEach(btn => btn.classList.toggle('active', btn.dataset.view === nextView));
+  localStorage.setItem(VIEW_KEY, nextView);
 }
 
 function handleAction() {
@@ -298,6 +307,9 @@ function handleKey(event) {
     event.preventDefault();
     handleAction();
   }
+  if (event.code === 'Digit1') setView('cockpit');
+  if (event.code === 'Digit2') setView('dash');
+  if (event.code === 'Digit3') setView('wide');
 }
 
 actionButton.addEventListener('click', handleAction);
@@ -306,6 +318,7 @@ actionButton.addEventListener('touchstart', (event) => {
   handleAction();
 }, { passive: false });
 window.addEventListener('keydown', handleKey);
+viewButtons.forEach(button => button.addEventListener('click', () => setView(button.dataset.view)));
 
 updateStatsUI();
 setMessage('Tap to stage', 'Tap anywhere, click, or press space. Leave when the tree turns green.', 'Street Car Ready');
@@ -314,3 +327,4 @@ setLaunchMode('STAGED');
 setCockpit(3200, 0);
 updateBoards('.---', '000');
 startIdleGaugeAnimation();
+setView(localStorage.getItem(VIEW_KEY) || 'cockpit');
