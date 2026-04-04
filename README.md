@@ -1,27 +1,16 @@
-# Sick Off The Line V6
+# Sick Launch Light V7
 
-A GitHub-ready drag strip reaction time game with:
-- upgraded street car cockpit styling
-- hood / cockpit / wide camera views
-- phone-friendly layout
-- Christmas tree launch sequence
-- foul start detection
-- local best / average / run tracking
-- Sick The Magazine sponsor branding
+Mobile-first reaction time game for GitHub Pages.
 
 ## Run locally
-Open `index.html` in your browser.
+Open `index.html` in a browser.
 
 ## Deploy to GitHub Pages
 1. Create a new GitHub repository.
-2. Upload every file in this folder.
-3. Commit to `main`.
-4. In GitHub, go to **Settings > Pages**.
-5. Set Pages to deploy from your branch, or use your existing Pages setup.
+2. Upload all files from this folder.
+3. In GitHub, go to **Settings > Pages**.
+4. Set deployment source to **Deploy from a branch**.
+5. Choose the `main` branch and `/root` folder.
+6. Save.
 
-## Controls
-- Tap / click anywhere to stage and react
-- Space / Enter also works
-- 1 = Cockpit
-- 2 = Hood
-- 3 = Wide
+If you prefer GitHub Actions, you can add a Pages workflow later.
