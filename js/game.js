@@ -13,6 +13,8 @@ const rpmNeedle = document.getElementById('rpmNeedle');
 const mphNeedle = document.getElementById('mphNeedle');
 const rpmValue = document.getElementById('rpmValue');
 const mphValue = document.getElementById('mphValue');
+const leftBoard = document.getElementById('leftBoard');
+const rightBoard = document.getElementById('rightBoard');
 
 const lights = {
   pre: document.querySelector('[data-light="pre"]'),
@@ -51,6 +53,11 @@ function setMessage(main, detail, tag) {
   headline.textContent = main;
   subline.textContent = detail;
   rating.textContent = tag;
+}
+
+function updateBoards(rt = '.---', mph = '000') {
+  leftBoard.textContent = rt;
+  rightBoard.textContent = mph;
 }
 
 function schedule(fn, delay) {
@@ -183,6 +190,7 @@ function stageSequence() {
   setLaunchMode('ARMED');
   setCockpit(3400, 0);
   setMessage('Stage Deep', 'Watch the tree drop. Hit it on green.', 'Race Ready');
+  updateBoards('.---', '000');
 
   stageLampsOn();
 
@@ -236,6 +244,7 @@ function foulStart() {
   lights.r2.classList.add('active');
   lights.r3.classList.add('active');
   setLaunchMode('FOUL');
+  updateBoards('FOUL', '000');
   setMessage('Red Light', 'Too early. Tap again to restage.', 'Foul Start');
   lastReactionEl.textContent = 'FOUL';
   flash('red');
@@ -255,6 +264,8 @@ function finishRun() {
   const best = bestReaction();
   const label = scoreLabel(reaction);
   const isBest = best !== null && Math.abs(best - reaction) < 0.0005;
+
+  updateBoards(formatReaction(reaction), String(Math.max(18, Math.min(42, Math.round(28 + (0.24 - Math.min(reaction, 0.24)) * 140)))));
 
   setMessage(
     isBest ? 'New Best' : 'Nice Leave',
@@ -301,4 +312,5 @@ setMessage('Tap to stage', 'Tap anywhere, click, or press space. Leave when the 
 stageLampsOn();
 setLaunchMode('STAGED');
 setCockpit(3200, 0);
+updateBoards('.---', '000');
 startIdleGaugeAnimation();

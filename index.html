@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Sick Off The Line V2 - a drag strip reaction time web game built for GitHub upload and static hosting." />
-  <title>Sick Off The Line V2</title>
+  <meta name="description" content="Sick Off The Line V3 - a drag strip reaction time web game built for GitHub upload and static hosting." />
+  <title>Sick Off The Line V3</title>
   <link rel="stylesheet" href="css/styles.css" />
 </head>
 <body>
@@ -13,15 +13,33 @@
       <div class="sky"></div>
       <div class="sun-glow"></div>
       <div class="horizon-glow"></div>
+      <div class="mountains"></div>
       <div class="stands left"></div>
       <div class="stands right"></div>
+
       <div class="track">
+        <div class="guardrail left-wall"></div>
+        <div class="guardrail right-wall"></div>
         <div class="lane left-lane"></div>
         <div class="lane right-lane"></div>
+        <div class="lane-groove left-groove"></div>
+        <div class="lane-groove right-groove"></div>
         <div class="center-strip"></div>
+        <div class="start-box"></div>
+        <div class="reflective-patch"></div>
         <div class="burnout haze"></div>
         <div class="motion-lines motion-left"></div>
         <div class="motion-lines motion-right"></div>
+        <div class="cone left-cone"></div>
+        <div class="cone right-cone"></div>
+        <div class="timing-board left-board">
+          <span>RT</span>
+          <strong id="leftBoard">.--- </strong>
+        </div>
+        <div class="timing-board right-board">
+          <span>MPH</span>
+          <strong id="rightBoard">000</strong>
+        </div>
       </div>
 
       <div class="tree-zone">
@@ -41,21 +59,21 @@
       </div>
 
       <aside class="sponsor-tower" aria-label="Race sponsor signage">
-        <div class="sponsor-head">Race Sponsor</div>
+        <div class="sponsor-head">Presented By</div>
         <div class="sponsor-card main-sponsor">
           <img src="assets/sick-the-magazine-logo.jpg" alt="Sick The Magazine logo" />
         </div>
         <div class="sponsor-card side-copy">
           <p>SICK THE MAGAZINE</p>
-          <span>Street car reaction challenge</span>
+          <span>Trackside sponsor signage</span>
         </div>
       </aside>
 
       <section class="hud">
         <div class="brand panel">
           <span class="eyebrow">Driver View</span>
-          <h1>Sick Off The Line <span>V2</span></h1>
-          <p>Wait for green. Jump too early and you red light.</p>
+          <h1>Sick Off The Line <span>V3</span></h1>
+          <p>Street car cockpit view. Cut a light and chase your best reaction.</p>
         </div>
 
         <div class="stats panel-grid">
@@ -78,20 +96,14 @@
         </div>
       </section>
 
-      <section class="center-callout">
-        <div class="status-card panel">
-          <div class="status-title" id="headline">Tap to stage</div>
-          <div class="status-copy" id="subline">Tap anywhere, click, or press space. Leave when the tree turns green.</div>
-          <div class="rating-pill" id="rating">Street Car Ready</div>
-        </div>
-      </section>
-
       <div class="cockpit-frame top"></div>
       <div class="cockpit-frame left"></div>
       <div class="cockpit-frame right"></div>
 
       <section class="dashboard">
         <div class="windshield-reflection"></div>
+        <div class="dash-top-strip"></div>
+
         <div class="gauge cluster-left">
           <div class="gauge-title">RPM</div>
           <div class="gauge-dial" id="rpmDial">
@@ -100,9 +112,20 @@
           <div class="gauge-readout" id="rpmValue">3200</div>
         </div>
 
-        <div class="dash-center panel">
-          <div class="launch-mode">Launch Mode: <strong id="launchMode">STAGED</strong></div>
-          <div class="hint-line">Tap / click / spacebar</div>
+        <div class="dash-center-stack">
+          <div class="dash-message panel">
+            <div class="status-title" id="headline">Tap to stage</div>
+            <div class="status-copy" id="subline">Tap anywhere, click, or press space. Leave when the tree turns green.</div>
+            <div class="dash-tags">
+              <div class="rating-pill" id="rating">Street Car Ready</div>
+              <div class="launch-mode-pill">Mode: <strong id="launchMode">STAGED</strong></div>
+            </div>
+          </div>
+          <div class="dash-hint-bar">
+            <span>Tap / Click / Spacebar</span>
+            <span class="separator"></span>
+            <span>Tree drops from red to green</span>
+          </div>
         </div>
 
         <div class="gauge cluster-right">
@@ -111,6 +134,16 @@
             <div class="needle" id="mphNeedle"></div>
           </div>
           <div class="gauge-readout" id="mphValue">0</div>
+        </div>
+
+        <div class="switch-bank panel">
+          <div class="switch-label">Race Panel</div>
+          <div class="switch-row">
+            <span class="switch active"></span>
+            <span class="switch"></span>
+            <span class="switch active"></span>
+            <span class="switch"></span>
+          </div>
         </div>
 
         <div class="steering-wheel">
