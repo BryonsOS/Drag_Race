@@ -1,22 +1,27 @@
-# Sick Off The Line V4
+# Sick Off The Line V6
 
-A static drag-strip reaction time web game built for GitHub Pages.
-
-## What's new in V4
-
-- improved drag strip environment
-- 3 camera views: Cockpit, Dash, and Wide
-- cleaner dashboard layout
-- better track detail and extra background elements
-- keyboard shortcuts for views: 1, 2, 3
+A GitHub-ready drag strip reaction time game with:
+- upgraded street car cockpit styling
+- hood / cockpit / wide camera views
+- phone-friendly layout
+- Christmas tree launch sequence
+- foul start detection
+- local best / average / run tracking
+- Sick The Magazine sponsor branding
 
 ## Run locally
+Open `index.html` in your browser.
 
-Open `index.html` in a browser.
+## Deploy to GitHub Pages
+1. Create a new GitHub repository.
+2. Upload every file in this folder.
+3. Commit to `main`.
+4. In GitHub, go to **Settings > Pages**.
+5. Set Pages to deploy from your branch, or use your existing Pages setup.
 
-## GitHub Pages
-
-1. Create a repo.
-2. Upload all project files.
-3. In **Settings > Pages**, set **Source** to **GitHub Actions**.
-4. Push changes and let the included workflow deploy.
+## Controls
+- Tap / click anywhere to stage and react
+- Space / Enter also works
+- 1 = Cockpit
+- 2 = Hood
+- 3 = Wide

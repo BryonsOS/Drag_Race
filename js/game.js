@@ -5,6 +5,7 @@ const rating = document.getElementById('rating');
 const launchMode = document.getElementById('launchMode');
 const actionButton = document.getElementById('actionButton');
 const viewButtons = document.querySelectorAll('.view-btn');
+const mobilePrompt = document.getElementById('mobilePrompt');
 
 const lastReactionEl = document.getElementById('lastReaction');
 const bestReactionEl = document.getElementById('bestReaction');
@@ -28,13 +29,14 @@ const lights = {
   g: document.querySelector('[data-light="g"]'),
 };
 
-const STORAGE_KEY = 'sick-off-the-line-v4-stats';
-const VIEW_KEY = 'sick-off-the-line-v4-view';
+const STORAGE_KEY = 'sick-off-the-line-v6-stats';
+const VIEW_KEY = 'sick-off-the-line-v6-view';
+
 let state = 'idle';
-let timeouts = [];
 let greenAt = null;
+let timeouts = [];
+let gaugeInterval = null;
 let stats = loadStats();
-let rpmTicker = null;
 
 function loadStats() {
   try {
@@ -51,98 +53,18 @@ function saveStats() {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(stats));
 }
 
-function setMessage(main, detail, tag) {
-  headline.textContent = main;
-  subline.textContent = detail;
-  rating.textContent = tag;
-}
-
-function updateBoards(rt = '.---', mph = '000') {
-  leftBoard.textContent = rt;
-  rightBoard.textContent = mph;
-}
-
-function schedule(fn, delay) {
-  const id = setTimeout(fn, delay);
+function schedule(callback, delay) {
+  const id = window.setTimeout(callback, delay);
   timeouts.push(id);
 }
 
-function clearAllTimers() {
-  timeouts.forEach(clearTimeout);
+function clearTimers() {
+  timeouts.forEach(window.clearTimeout);
   timeouts = [];
 }
 
-function clearFlash() {
-  scene.classList.remove('green-flash', 'red-flash', 'launching');
-}
-
 function resetLights() {
-  Object.values(lights).forEach(light => light.classList.remove('active'));
-}
-
-function setNeedle(el, percent) {
-  const min = -130;
-  const max = 50;
-  const angle = min + (max - min) * percent;
-  el.style.transform = `rotate(${angle}deg)`;
-}
-
-function setCockpit(rpm, mph) {
-  const rpmPercent = Math.min(Math.max(rpm / 8000, 0), 1);
-  const mphPercent = Math.min(Math.max(mph / 160, 0), 1);
-  setNeedle(rpmNeedle, rpmPercent);
-  setNeedle(mphNeedle, mphPercent);
-  rpmValue.textContent = String(Math.round(rpm));
-  mphValue.textContent = String(Math.round(mph));
-}
-
-function startIdleGaugeAnimation() {
-  stopIdleGaugeAnimation();
-  let tick = 0;
-  rpmTicker = setInterval(() => {
-    if (!['idle', 'result', 'foul'].includes(state)) return;
-    tick += 0.09;
-    const rpm = 2900 + Math.sin(tick) * 280 + Math.cos(tick * 0.7) * 90;
-    setCockpit(rpm, 0);
-  }, 50);
-}
-
-function stopIdleGaugeAnimation() {
-  if (rpmTicker) {
-    clearInterval(rpmTicker);
-    rpmTicker = null;
-  }
-}
-
-function flash(kind) {
-  clearFlash();
-  scene.classList.add(kind === 'green' ? 'green-flash' : 'red-flash');
-  setTimeout(() => clearFlash(), 130);
-}
-
-function formatReaction(seconds) {
-  return `${seconds.toFixed(3)}s`;
-}
-
-function averageReaction() {
-  if (!stats.runs.length) return null;
-  return stats.runs.reduce((acc, value) => acc + value, 0) / stats.runs.length;
-}
-
-function bestReaction() {
-  if (!stats.runs.length) return null;
-  return Math.min(...stats.runs);
-}
-
-function updateStatsUI() {
-  const best = bestReaction();
-  const avg = averageReaction();
-  const last = stats.runs.at(-1) ?? null;
-
-  lastReactionEl.textContent = last === null ? '--' : formatReaction(last);
-  bestReactionEl.textContent = best === null ? '--' : formatReaction(best);
-  avgReactionEl.textContent = avg === null ? '--' : formatReaction(avg);
-  runCountEl.textContent = String(stats.runs.length);
+  Object.values(lights).forEach((light) => light.classList.remove('active'));
 }
 
 function stageLampsOn() {
@@ -150,105 +72,116 @@ function stageLampsOn() {
   lights.stage.classList.add('active');
 }
 
-function scoreLabel(reaction) {
-  if (reaction <= 0.06) return 'PRO TREE MONSTER';
-  if (reaction <= 0.11) return 'CUT A LIGHT';
-  if (reaction <= 0.18) return 'STRONG STREET LEAVE';
-  if (reaction <= 0.26) return 'GOOD HIT';
-  return 'KEEP PRACTICING';
+function setMessage(main, detail, tag) {
+  headline.textContent = main;
+  subline.textContent = detail;
+  rating.textContent = tag;
 }
 
 function setLaunchMode(text) {
   launchMode.textContent = text;
 }
 
+function updateBoards(rt = '.---', mph = '000') {
+  leftBoard.textContent = rt;
+  rightBoard.textContent = mph;
+}
+
+function setNeedle(element, percent) {
+  const min = -130;
+  const max = 50;
+  const angle = min + (max - min) * Math.max(0, Math.min(1, percent));
+  element.style.transform = `translateX(-50%) rotate(${angle}deg)`;
+}
+
+function setCockpit(rpm, mph) {
+  setNeedle(rpmNeedle, rpm / 8000);
+  setNeedle(mphNeedle, mph / 160);
+  rpmValue.textContent = String(Math.round(rpm));
+  mphValue.textContent = String(Math.round(mph));
+}
+
+function stopGaugeAnimation() {
+  if (gaugeInterval) {
+    window.clearInterval(gaugeInterval);
+    gaugeInterval = null;
+  }
+}
+
+function startIdleGaugeAnimation() {
+  stopGaugeAnimation();
+  let t = 0;
+  gaugeInterval = window.setInterval(() => {
+    if (!['idle', 'result', 'foul'].includes(state)) return;
+    t += 0.08;
+    const rpm = 3050 + Math.sin(t) * 220 + Math.cos(t * 0.55) * 90;
+    setCockpit(rpm, 0);
+  }, 50);
+}
+
+function updateStatsUI() {
+  const runs = stats.runs;
+  const best = runs.length ? Math.min(...runs) : null;
+  const avg = runs.length ? runs.reduce((sum, run) => sum + run, 0) / runs.length : null;
+  const last = runs.length ? runs[runs.length - 1] : null;
+
+  lastReactionEl.textContent = last === null ? '--' : `${last.toFixed(3)}s`;
+  bestReactionEl.textContent = best === null ? '--' : `${best.toFixed(3)}s`;
+  avgReactionEl.textContent = avg === null ? '--' : `${avg.toFixed(3)}s`;
+  runCountEl.textContent = String(runs.length);
+}
+
+function reactionLabel(reaction) {
+  if (reaction <= 0.06) return 'Monster Light';
+  if (reaction <= 0.10) return 'Sharp Leave';
+  if (reaction <= 0.16) return 'Strong Street Hit';
+  if (reaction <= 0.24) return 'Good Reaction';
+  return 'Run It Back';
+}
+
+function clearFlash() {
+  scene.classList.remove('green-flash', 'red-flash', 'launching');
+}
+
+function flash(color) {
+  clearFlash();
+  scene.classList.add(color === 'green' ? 'green-flash' : 'red-flash');
+  window.setTimeout(() => clearFlash(), 150);
+}
+
 function animateLaunch() {
   scene.classList.add('launching');
   let frame = 0;
-  const totalFrames = 16;
-  const interval = setInterval(() => {
+  const totalFrames = 18;
+  const interval = window.setInterval(() => {
     frame += 1;
     const progress = frame / totalFrames;
-    const rpm = 6200 - progress * 2300;
-    const mph = progress * 38;
+    const rpm = 6300 - progress * 2500;
+    const mph = progress * 42;
     setCockpit(rpm, mph);
     if (frame >= totalFrames) {
-      clearInterval(interval);
+      window.clearInterval(interval);
       scene.classList.remove('launching');
       if (['idle', 'result', 'foul'].includes(state)) startIdleGaugeAnimation();
     }
-  }, 30);
-}
-
-function stageSequence() {
-  clearAllTimers();
-  clearFlash();
-  resetLights();
-  stopIdleGaugeAnimation();
-
-  state = 'countdown';
-  greenAt = null;
-  setLaunchMode('ARMED');
-  setCockpit(3400, 0);
-  setMessage('Stage Deep', 'Watch the tree drop. Hit it on green.', 'Race Ready');
-  updateBoards('.---', '000');
-  stageLampsOn();
-
-  const base = 700 + Math.random() * 900;
-  const step = 420;
-
-  schedule(() => {
-    lights.r1.classList.add('active');
-    setCockpit(3700, 0);
-  }, base);
-
-  schedule(() => {
-    lights.r2.classList.add('active');
-    setCockpit(4050, 0);
-  }, base + step);
-
-  schedule(() => {
-    lights.r3.classList.add('active');
-    setCockpit(4450, 0);
-  }, base + step * 2);
-
-  schedule(() => {
-    lights.y1.classList.add('active');
-    setCockpit(5100, 0);
-  }, base + step * 3);
-
-  schedule(() => {
-    lights.y2.classList.add('active');
-    setCockpit(5600, 0);
-  }, base + step * 4);
-
-  schedule(() => {
-    resetLights();
-    stageLampsOn();
-    lights.g.classList.add('active');
-    greenAt = performance.now();
-    state = 'green';
-    setLaunchMode('GO');
-    flash('green');
-    setMessage('GO GO GO', 'Leave now. Your reaction time starts on green.', 'Launch');
-    setCockpit(6100, 0);
-  }, base + step * 5);
+  }, 28);
 }
 
 function foulStart() {
-  clearAllTimers();
+  clearTimers();
   state = 'foul';
+  greenAt = null;
   resetLights();
   stageLampsOn();
   lights.r1.classList.add('active');
   lights.r2.classList.add('active');
   lights.r3.classList.add('active');
   setLaunchMode('FOUL');
+  setMessage('Red Light', 'Too early. Tap again to stage and try another leave.', 'Foul Start');
   updateBoards('FOUL', '000');
-  setMessage('Red Light', 'Too early. Tap again to restage.', 'Foul Start');
   lastReactionEl.textContent = 'FOUL';
-  flash('red');
   setCockpit(2500, 0);
+  flash('red');
   startIdleGaugeAnimation();
 }
 
@@ -261,29 +194,74 @@ function finishRun() {
   updateStatsUI();
   setLaunchMode('COMPLETE');
 
-  const best = bestReaction();
-  const label = scoreLabel(reaction);
-  const isBest = best !== null && Math.abs(best - reaction) < 0.0005;
-  const mph = String(Math.max(18, Math.min(42, Math.round(28 + (0.24 - Math.min(reaction, 0.24)) * 140))));
+  const best = Math.min(...stats.runs);
+  const isBest = Math.abs(best - reaction) < 0.0005;
+  const mph = Math.max(18, Math.min(44, Math.round(27 + (0.24 - Math.min(reaction, 0.24)) * 145)));
 
-  updateBoards(formatReaction(reaction), mph);
+  updateBoards(`${reaction.toFixed(3)}s`, String(mph));
   setMessage(
-    isBest ? 'New Best' : 'Nice Leave',
-    `Reaction: ${formatReaction(reaction)}. ${isBest ? 'Fastest run yet.' : 'Tap to run it back.'}`,
-    label
+    isBest ? 'New Best Light' : 'Clean Leave',
+    `Reaction: ${reaction.toFixed(3)}s. ${isBest ? 'That is your quickest hit yet.' : 'Tap again and chase a better light.'}`,
+    reactionLabel(reaction)
   );
 
   animateLaunch();
   schedule(() => startIdleGaugeAnimation(), 620);
 }
 
+function stageSequence() {
+  clearTimers();
+  clearFlash();
+  stopGaugeAnimation();
+  resetLights();
+  stageLampsOn();
+
+  state = 'countdown';
+  greenAt = null;
+  setLaunchMode('ARMED');
+  setMessage('Stage Deep', 'Tree is armed. Stay patient and hit green.', 'Race Ready');
+  updateBoards('.---', '000');
+  setCockpit(3500, 0);
+
+  const base = 700 + Math.random() * 850;
+  const step = 400;
+
+  schedule(() => { lights.r1.classList.add('active'); setCockpit(3900, 0); }, base);
+  schedule(() => { lights.r2.classList.add('active'); setCockpit(4300, 0); }, base + step);
+  schedule(() => { lights.r3.classList.add('active'); setCockpit(4700, 0); }, base + step * 2);
+  schedule(() => { lights.y1.classList.add('active'); setCockpit(5250, 0); }, base + step * 3);
+  schedule(() => { lights.y2.classList.add('active'); setCockpit(5750, 0); }, base + step * 4);
+  schedule(() => {
+    resetLights();
+    stageLampsOn();
+    lights.g.classList.add('active');
+    greenAt = performance.now();
+    state = 'green';
+    setLaunchMode('GO');
+    setMessage('GO GO GO', 'Leave now. Reaction time starts on green.', 'Launch');
+    setCockpit(6200, 0);
+    flash('green');
+  }, base + step * 5);
+}
+
 function setView(view) {
-  const allowed = ['cockpit', 'dash', 'wide'];
-  const nextView = allowed.includes(view) ? view : 'cockpit';
-  scene.classList.remove('view-cockpit', 'view-dash', 'view-wide');
-  scene.classList.add(`view-${nextView}`);
-  viewButtons.forEach(btn => btn.classList.toggle('active', btn.dataset.view === nextView));
-  localStorage.setItem(VIEW_KEY, nextView);
+  const allowed = ['cockpit', 'hood', 'wide'];
+  const next = allowed.includes(view) ? view : 'cockpit';
+  scene.classList.remove('view-cockpit', 'view-hood', 'view-wide');
+  scene.classList.add(`view-${next}`);
+  viewButtons.forEach((button) => button.classList.toggle('active', button.dataset.view === next));
+  localStorage.setItem(VIEW_KEY, next);
+}
+
+function applyResponsiveDefaults() {
+  const portrait = window.matchMedia('(max-width: 820px) and (orientation: portrait)').matches;
+  if (mobilePrompt) {
+    mobilePrompt.style.display = portrait ? 'block' : '';
+  }
+  const savedView = localStorage.getItem(VIEW_KEY);
+  if (!savedView && portrait) {
+    setView('hood');
+  }
 }
 
 function handleAction() {
@@ -291,12 +269,10 @@ function handleAction() {
     stageSequence();
     return;
   }
-
   if (state === 'countdown') {
     foulStart();
     return;
   }
-
   if (state === 'green') {
     finishRun();
   }
@@ -308,7 +284,7 @@ function handleKey(event) {
     handleAction();
   }
   if (event.code === 'Digit1') setView('cockpit');
-  if (event.code === 'Digit2') setView('dash');
+  if (event.code === 'Digit2') setView('hood');
   if (event.code === 'Digit3') setView('wide');
 }
 
@@ -318,13 +294,16 @@ actionButton.addEventListener('touchstart', (event) => {
   handleAction();
 }, { passive: false });
 window.addEventListener('keydown', handleKey);
-viewButtons.forEach(button => button.addEventListener('click', () => setView(button.dataset.view)));
+viewButtons.forEach((button) => button.addEventListener('click', () => setView(button.dataset.view)));
+window.addEventListener('resize', applyResponsiveDefaults);
+window.addEventListener('orientationchange', applyResponsiveDefaults);
 
 updateStatsUI();
-setMessage('Tap to stage', 'Tap anywhere, click, or press space. Leave when the tree turns green.', 'Street Car Ready');
-stageLampsOn();
+setMessage('Tap to stage', 'Tap, click, or press space. The tree drops 3 red, 2 yellow, then green.', 'Street Car Ready');
 setLaunchMode('STAGED');
-setCockpit(3200, 0);
+stageLampsOn();
 updateBoards('.---', '000');
+setCockpit(3200, 0);
 startIdleGaugeAnimation();
 setView(localStorage.getItem(VIEW_KEY) || 'cockpit');
+applyResponsiveDefaults();

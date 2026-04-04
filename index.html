@@ -2,42 +2,39 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Sick Off The Line V4 - drag strip reaction time game with improved camera views." />
-  <title>Sick Off The Line V4</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="description" content="Sick Off The Line V6 - mobile-friendly drag strip reaction game with upgraded cockpit and track visuals." />
+  <title>Sick Off The Line V6</title>
   <link rel="stylesheet" href="css/styles.css" />
 </head>
 <body>
-  <main class="game-shell" aria-label="Sick Off The Line reaction time game">
+  <main class="game-shell" aria-label="Sick Off The Line drag racing reaction game">
     <section class="scene view-cockpit" id="scene">
       <div class="sky"></div>
-      <div class="sun-glow"></div>
-      <div class="horizon-glow"></div>
+      <div class="sun-haze"></div>
+      <div class="clouds"></div>
       <div class="mountains"></div>
-      <div class="stands left"></div>
-      <div class="stands right"></div>
-      <div class="track-cars car-left"></div>
-      <div class="track-cars car-right"></div>
+      <div class="grandstands left"></div>
+      <div class="grandstands right"></div>
+      <div class="light-poles left"></div>
+      <div class="light-poles right"></div>
+      <div class="scoreboard far-left"></div>
+      <div class="scoreboard far-right"></div>
       <div class="billboard left"></div>
       <div class="billboard right"></div>
 
-      <div class="track" id="track">
-        <div class="guardrail left-wall"></div>
-        <div class="guardrail right-wall"></div>
-        <div class="lane left-lane"></div>
-        <div class="lane right-lane"></div>
-        <div class="lane-groove left-groove"></div>
-        <div class="lane-groove right-groove"></div>
-        <div class="center-strip"></div>
-        <div class="start-box"></div>
-        <div class="reflective-patch"></div>
-        <div class="burnout haze"></div>
-        <div class="motion-lines motion-left"></div>
-        <div class="motion-lines motion-right"></div>
-        <div class="cone left-cone"></div>
-        <div class="cone right-cone"></div>
-        <div class="rubber-mark left-mark"></div>
-        <div class="rubber-mark right-mark"></div>
+      <div class="track-wrap" id="trackWrap">
+        <div class="track-surface"></div>
+        <div class="track-edge left"></div>
+        <div class="track-edge right"></div>
+        <div class="track-centerline"></div>
+        <div class="track-groove left"></div>
+        <div class="track-groove right"></div>
+        <div class="rubber-patch left"></div>
+        <div class="rubber-patch right"></div>
+        <div class="cone left"></div>
+        <div class="cone right"></div>
+        <div class="opponent-lane-car"></div>
         <div class="timing-board left-board">
           <span>RT</span>
           <strong id="leftBoard">.---</strong>
@@ -49,128 +46,137 @@
       </div>
 
       <div class="tree-zone" id="treeZone">
-        <div class="tree-sign">Christmas Tree</div>
-        <div class="tree-post">
-          <div class="tree-lights">
-            <button class="light pre disabled" data-light="pre" tabindex="-1" aria-hidden="true"></button>
-            <button class="light stage disabled" data-light="stage" tabindex="-1" aria-hidden="true"></button>
-            <button class="light red" data-light="r1" tabindex="-1" aria-hidden="true"></button>
-            <button class="light red" data-light="r2" tabindex="-1" aria-hidden="true"></button>
-            <button class="light red" data-light="r3" tabindex="-1" aria-hidden="true"></button>
-            <button class="light yellow" data-light="y1" tabindex="-1" aria-hidden="true"></button>
-            <button class="light yellow" data-light="y2" tabindex="-1" aria-hidden="true"></button>
-            <button class="light green" data-light="g" tabindex="-1" aria-hidden="true"></button>
-          </div>
+        <div class="tree-topper">Christmas Tree</div>
+        <div class="tree-post"></div>
+        <div class="tree-lights">
+          <div class="light pre" data-light="pre"></div>
+          <div class="light stage" data-light="stage"></div>
+          <div class="light red" data-light="r1"></div>
+          <div class="light red" data-light="r2"></div>
+          <div class="light red" data-light="r3"></div>
+          <div class="light yellow" data-light="y1"></div>
+          <div class="light yellow" data-light="y2"></div>
+          <div class="light green" data-light="g"></div>
         </div>
       </div>
 
-      <aside class="sponsor-tower" aria-label="Race sponsor signage">
-        <div class="sponsor-head">Presented By</div>
-        <div class="sponsor-card main-sponsor">
+      <aside class="sponsor-tower" aria-label="Race sponsor tower">
+        <div class="tower-header">Track Sponsor</div>
+        <div class="tower-logo">
           <img src="assets/sick-the-magazine-logo.jpg" alt="Sick The Magazine logo" />
         </div>
-        <div class="sponsor-card side-copy">
-          <p>SICK THE MAGAZINE</p>
-          <span>Trackside sponsor signage</span>
-        </div>
+        <div class="tower-copy">Sick The Magazine<br /><span>Street car reaction battle</span></div>
       </aside>
 
-      <section class="hud">
-        <div class="brand panel">
-          <span class="eyebrow">Driver View</span>
-          <h1>Sick Off The Line <span>V4</span></h1>
-          <p>Pick a better camera angle, watch the tree, and leave on green.</p>
+      <section class="hud hud-top">
+        <div class="brand-card panel glass">
+          <div class="eyebrow">Driver Reaction Game</div>
+          <h1>Sick Off The Line <span>V6</span></h1>
+          <p>Street car cockpit, better views, mobile layout, and a fuller drag strip atmosphere.</p>
         </div>
 
-        <div class="stats panel-grid">
-          <article class="panel stat-box">
-            <div class="stat-label">Last</div>
-            <div class="stat-value" id="lastReaction">--</div>
+        <div class="stats-grid">
+          <article class="panel stat-box glass">
+            <span class="label">Last</span>
+            <strong id="lastReaction">--</strong>
           </article>
-          <article class="panel stat-box">
-            <div class="stat-label">Best</div>
-            <div class="stat-value" id="bestReaction">--</div>
+          <article class="panel stat-box glass">
+            <span class="label">Best</span>
+            <strong id="bestReaction">--</strong>
           </article>
-          <article class="panel stat-box">
-            <div class="stat-label">Avg</div>
-            <div class="stat-value" id="avgReaction">--</div>
+          <article class="panel stat-box glass">
+            <span class="label">Avg</span>
+            <strong id="avgReaction">--</strong>
           </article>
-          <article class="panel stat-box">
-            <div class="stat-label">Runs</div>
-            <div class="stat-value" id="runCount">0</div>
+          <article class="panel stat-box glass">
+            <span class="label">Runs</span>
+            <strong id="runCount">0</strong>
           </article>
         </div>
       </section>
 
-      <section class="view-picker panel" aria-label="Camera view picker">
-        <span class="picker-label">View</span>
+      <section class="view-picker panel glass" aria-label="Camera view picker">
+        <div class="picker-row">
+          <span class="picker-title">Views</span>
+          <span class="picker-help">1 / 2 / 3</span>
+        </div>
         <div class="view-buttons" id="viewButtons">
           <button class="view-btn active" data-view="cockpit">Cockpit</button>
-          <button class="view-btn" data-view="dash">Dash</button>
+          <button class="view-btn" data-view="hood">Hood</button>
           <button class="view-btn" data-view="wide">Wide</button>
         </div>
       </section>
 
-      <div class="cockpit-frame top"></div>
-      <div class="cockpit-frame left"></div>
-      <div class="cockpit-frame right"></div>
+      <div class="mobile-prompt panel glass" id="mobilePrompt">Tap anywhere to stage. Hold your nerve and leave on green.</div>
+
+      <div class="windshield-frame top"></div>
+      <div class="windshield-frame left"></div>
+      <div class="windshield-frame right"></div>
+      <div class="roof-shadow"></div>
+      <div class="hood-line left"></div>
+      <div class="hood-line right"></div>
+      <div class="hood-scoop"></div>
+      <div class="rearview-mirror"></div>
 
       <section class="dashboard" id="dashboard">
-        <div class="windshield-reflection"></div>
-        <div class="dash-top-strip"></div>
-        <div class="rearview-mirror"></div>
-        <div class="a-pillar left"></div>
-        <div class="a-pillar right"></div>
-        <div class="hood-bulge"></div>
+        <div class="dash-curve"></div>
+        <div class="dash-trim"></div>
 
-        <div class="gauge cluster-left">
+        <div class="gauge-panel left-cluster">
           <div class="gauge-title">RPM</div>
-          <div class="gauge-dial">
+          <div class="gauge-dial tach">
+            <div class="gauge-ring"></div>
             <div class="needle" id="rpmNeedle"></div>
+            <div class="gauge-center"></div>
           </div>
-          <div class="gauge-readout" id="rpmValue">3200</div>
+          <div class="digital-readout" id="rpmValue">3200</div>
         </div>
 
-        <div class="dash-center-stack">
-          <div class="dash-message panel">
-            <div class="status-title" id="headline">Tap to stage</div>
-            <div class="status-copy" id="subline">Tap anywhere, click, or press space. Leave when the tree turns green.</div>
-            <div class="dash-tags">
-              <div class="rating-pill" id="rating">Street Car Ready</div>
-              <div class="launch-mode-pill">Mode: <strong id="launchMode">STAGED</strong></div>
-            </div>
+        <div class="center-console panel glass">
+          <div class="status-headline" id="headline">Tap to stage</div>
+          <div class="status-copy" id="subline">Tap, click, or press space. The tree drops 3 red, 2 yellow, then green.</div>
+          <div class="status-pills">
+            <div class="status-pill" id="rating">Street Car Ready</div>
+            <div class="status-pill mode-pill">Mode: <strong id="launchMode">STAGED</strong></div>
           </div>
-          <div class="dash-hint-bar">
-            <span>Tap / Click / Spacebar</span>
-            <span class="separator"></span>
-            <span>Tree drops from red to green</span>
+          <div class="helper-bar">
+            <span>Leave on green</span>
+            <span class="dot"></span>
+            <span>Red light if you jump early</span>
           </div>
         </div>
 
-        <div class="gauge cluster-right">
+        <div class="gauge-panel right-cluster">
           <div class="gauge-title">MPH</div>
-          <div class="gauge-dial">
+          <div class="gauge-dial speedo">
+            <div class="gauge-ring"></div>
             <div class="needle" id="mphNeedle"></div>
+            <div class="gauge-center"></div>
           </div>
-          <div class="gauge-readout" id="mphValue">0</div>
+          <div class="digital-readout" id="mphValue">0</div>
         </div>
 
-        <div class="switch-bank panel">
-          <div class="switch-label">Race Panel</div>
-          <div class="switch-row">
+        <div class="switch-panel panel glass">
+          <span class="switch-label">Race Panel</span>
+          <div class="switches">
             <span class="switch active"></span>
             <span class="switch"></span>
             <span class="switch active"></span>
             <span class="switch"></span>
+            <span class="switch active"></span>
           </div>
         </div>
 
         <div class="steering-wheel">
+          <div class="wheel-ring"></div>
+          <div class="wheel-spoke spoke-1"></div>
+          <div class="wheel-spoke spoke-2"></div>
+          <div class="wheel-spoke spoke-3"></div>
           <div class="wheel-center"></div>
         </div>
       </section>
 
-      <button class="action-overlay" id="actionButton" aria-label="Tap to play the drag strip reaction game"></button>
+      <button class="tap-layer" id="actionButton" aria-label="Tap to start or react"></button>
       <div class="flash-overlay" id="flashOverlay"></div>
     </section>
   </main>
