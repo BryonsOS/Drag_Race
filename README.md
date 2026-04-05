@@ -1,0 +1,26 @@
+# Street Launch V8
+
+A mobile-first arcade drag reaction game prototype.
+
+## Features
+- Windshield, Dash, and Hood camera views
+- Christmas tree sequence with arcade-fast pacing
+- Opponent lane with reaction-based launch feedback
+- Mobile vibration on green and red-light foul
+- Sick The Magazine sponsor branding trackside
+- GitHub Pages friendly static site
+
+## Run locally
+Open `index.html` in a browser.
+
+## Deploy to GitHub Pages
+1. Create a new GitHub repo.
+2. Upload all project files.
+3. In GitHub, go to **Settings > Pages**.
+4. Set **Source** to **GitHub Actions**.
+5. Push to `main` and wait for deployment.
+
+## Controls
+- Tap the scene or press the **Launch** button to react.
+- **Spacebar** also launches on desktop.
+- **1 / 2 / 3** switch views.
