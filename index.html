@@ -3,21 +3,13 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <meta name="theme-color" content="#0a0f19" />
-  <title>Street Launch Reaction</title>
+  <meta name="theme-color" content="#090d16" />
+  <title>Street Launch</title>
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <div class="app-shell">
-    <header class="topbar">
-      <div>
-        <p class="eyebrow">Arcade Drag Reaction</p>
-        <h1>Street Launch</h1>
-      </div>
-      <div class="pill result-pill" id="resultPill">Stage up</div>
-    </header>
-
-    <main class="game-card">
+  <main class="app-shell">
+    <section class="game-card">
       <section class="race-scene view-windshield" id="raceScene" aria-label="Drag strip game view">
         <div class="sky-glow"></div>
         <div class="horizon-glow"></div>
@@ -25,18 +17,12 @@
         <div class="crowd crowd-right"></div>
         <div class="scoreboard left-board"></div>
         <div class="scoreboard right-board"></div>
-        <div class="sponsor-sign left-sign">
-          <img src="assets/sick-logo.jpeg" alt="Sick The Magazine sponsor logo" />
-        </div>
-        <div class="sponsor-sign right-sign">
-          <span>Presented by</span>
-          <strong>Sick The Magazine</strong>
-        </div>
+        <div class="sponsor-sign left-sign"><img src="assets/sick-logo.jpeg" alt="Sick The Magazine sponsor logo" /></div>
+        <div class="sponsor-sign right-sign"><span>Sponsor</span><strong>Sick The Magazine</strong></div>
 
         <div class="track"></div>
         <div class="lane lane-left"></div>
         <div class="lane lane-right"></div>
-        <div class="lane-reflect"></div>
         <div class="rumble rumble-left"></div>
         <div class="rumble rumble-right"></div>
 
@@ -66,10 +52,6 @@
           </div>
         </div>
 
-        <div class="player-lane">
-          <div class="player-cue" id="playerCue"></div>
-        </div>
-
         <div class="windshield-frame frame-top"></div>
         <div class="windshield-frame frame-left"></div>
         <div class="windshield-frame frame-right"></div>
@@ -86,8 +68,8 @@
             <div class="gauge-label">RPM</div>
           </div>
           <div class="center-cluster">
-            <div class="shift-light" id="shiftLight"></div>
-            <div class="dash-message" id="dashMessage">Tap <span>Launch</span> when green</div>
+            <div class="status-chip" id="resultPill">Ready</div>
+            <div class="dash-message" id="dashMessage">Tap <span>Launch</span> on green</div>
           </div>
           <div class="cluster speed-cluster">
             <svg viewBox="0 0 120 80" class="gauge-svg">
@@ -102,15 +84,15 @@
       </section>
 
       <section class="controls-panel">
-        <div class="primary-actions">
-          <button id="launchButton" class="launch-btn">Launch</button>
-          <button id="resetButton" class="secondary-btn">Restage</button>
+        <div class="hero-actions">
+          <button id="launchButton" class="launch-btn" type="button">LAUNCH</button>
+          <button id="resetButton" class="secondary-btn" type="button">RESTAGE</button>
         </div>
 
         <div class="view-buttons" role="group" aria-label="Select camera view">
-          <button class="view-btn active" data-view="windshield">Windshield</button>
-          <button class="view-btn" data-view="dash">Dash</button>
-          <button class="view-btn" data-view="hood">Hood</button>
+          <button class="view-btn active" data-view="windshield" type="button">Windshield</button>
+          <button class="view-btn" data-view="dash" type="button">Dash</button>
+          <button class="view-btn" data-view="hood" type="button">Hood</button>
         </div>
 
         <div class="stats-grid">
@@ -121,25 +103,15 @@
         </div>
 
         <div class="opponent-bar-wrap">
-          <div class="opponent-meta">
-            <span>Opponent light</span>
-            <strong id="opponentReaction">.---</strong>
-          </div>
+          <div class="opponent-meta"><span>Opponent light</span><strong id="opponentReaction">.---</strong></div>
           <div class="race-bars">
-            <div class="bar-row">
-              <span>You</span>
-              <div class="bar-track"><div class="bar-fill player-fill" id="playerBar"></div></div>
-            </div>
-            <div class="bar-row">
-              <span>Other lane</span>
-              <div class="bar-track"><div class="bar-fill opponent-fill" id="opponentBar"></div></div>
-            </div>
+            <div class="bar-row"><span>You</span><div class="bar-track"><div class="bar-fill player-fill" id="playerBar"></div></div></div>
+            <div class="bar-row"><span>Other lane</span><div class="bar-track"><div class="bar-fill opponent-fill" id="opponentBar"></div></div></div>
           </div>
         </div>
       </section>
-    </main>
-  </div>
-
+    </section>
+  </main>
   <script src="script.js"></script>
 </body>
 </html>
