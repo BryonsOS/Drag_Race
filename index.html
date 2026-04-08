@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#090d16" />
+  <title>Street Launch</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <main class="app-shell">
+    <section class="game-card">
+      <section class="topbar">
+        <div class="brand-lockup">
+          <span class="eyebrow">Streetcar reaction</span>
+          <h1>Street Launch</h1>
+        </div>
+        <div class="topbar-status">
+          <span class="status-label">Mode</span>
+          <strong id="raceMode">Pro Tree</strong>
+        </div>
+      </section>
+
+      <section class="race-scene view-windshield" id="raceScene" aria-label="Drag strip game view">
+        <div class="sky-glow"></div>
+        <div class="city-glow"></div>
+        <div class="horizon-glow"></div>
+        <div class="scanlines"></div>
+        <div class="crowd crowd-left"></div>
+        <div class="crowd crowd-right"></div>
+        <div class="scoreboard left-board"></div>
+        <div class="scoreboard right-board"></div>
+        <div class="sponsor-sign left-sign"><img src="assets/sick-logo.jpeg" alt="Sick The Magazine sponsor logo" /></div>
+        <div class="sponsor-sign right-sign"><span>Sponsor</span><strong>Sick The Magazine</strong></div>
+
+        <div class="hud-banner">
+          <div class="hud-block">
+            <span class="hud-label">Tree</span>
+            <strong id="treeStatus">Staged</strong>
+          </div>
+          <div class="hud-block hud-block-center">
+            <span class="hud-label">Target</span>
+            <strong>.0xx</strong>
+          </div>
+          <div class="hud-block">
+            <span class="hud-label">Lane</span>
+            <strong>Right</strong>
+          </div>
+        </div>
+
+        <div class="track"></div>
+        <div class="lane lane-left"></div>
+        <div class="lane lane-right"></div>
+        <div class="rumble rumble-left"></div>
+        <div class="rumble rumble-right"></div>
+
+        <div class="tree-wrap">
+          <div class="tree-stand"></div>
+          <div class="tree-body">
+            <div class="bulb small prestage" id="prestageBulb"></div>
+            <div class="bulb small stage" id="stageBulb"></div>
+            <div class="bulb red" id="red1"></div>
+            <div class="bulb red" id="red2"></div>
+            <div class="bulb red" id="red3"></div>
+            <div class="bulb yellow" id="yellow1"></div>
+            <div class="bulb yellow" id="yellow2"></div>
+            <div class="bulb green" id="green"></div>
+            <div class="bulb red foul" id="foul"></div>
+          </div>
+        </div>
+
+        <div class="opponent-lane">
+          <div class="car opponent" id="opponentCar">
+            <div class="car-shadow"></div>
+            <div class="car-body"></div>
+            <div class="car-window"></div>
+            <div class="car-light"></div>
+            <div class="wheel front"></div>
+            <div class="wheel rear"></div>
+          </div>
+        </div>
+
+        <div class="windshield-frame frame-top"></div>
+        <div class="windshield-frame frame-left"></div>
+        <div class="windshield-frame frame-right"></div>
+        <div class="hood" id="hood"></div>
+
+        <div class="dashboard" id="dashboard">
+          <div class="cluster tach-cluster">
+            <svg viewBox="0 0 120 80" class="gauge-svg">
+              <path d="M15 65 A45 45 0 0 1 105 65" class="gauge-track" />
+              <path d="M15 65 A45 45 0 0 1 105 65" class="gauge-fill" id="tachArc" />
+              <line x1="60" y1="65" x2="34" y2="35" class="needle" id="tachNeedle" />
+              <circle cx="60" cy="65" r="4" class="hub" />
+            </svg>
+            <div class="gauge-label">RPM</div>
+          </div>
+          <div class="center-cluster">
+            <div class="status-chip" id="resultPill">Ready</div>
+            <div class="dash-message" id="dashMessage">Tap <span>Launch</span> on green</div>
+          </div>
+          <div class="cluster speed-cluster">
+            <svg viewBox="0 0 120 80" class="gauge-svg">
+              <path d="M15 65 A45 45 0 0 1 105 65" class="gauge-track" />
+              <path d="M15 65 A45 45 0 0 1 105 65" class="gauge-fill" id="speedArc" />
+              <line x1="60" y1="65" x2="83" y2="34" class="needle" id="speedNeedle" />
+              <circle cx="60" cy="65" r="4" class="hub" />
+            </svg>
+            <div class="gauge-label">MPH</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="controls-panel">
+        <div class="panel-intro">
+          <p class="panel-kicker">Cut the tree. Beat the other lane.</p>
+          <p class="panel-copy">Hold steady, wait for green, and smash the launch button with perfect timing.</p>
+        </div>
+
+        <div class="hero-actions">
+          <button id="launchButton" class="launch-btn" type="button">
+            <span class="btn-title">Launch</span>
+            <span class="btn-subtitle">Tap on green</span>
+          </button>
+          <button id="resetButton" class="secondary-btn" type="button">Restage</button>
+        </div>
+
+        <div class="view-buttons" role="group" aria-label="Select camera view">
+          <button class="view-btn active" data-view="windshield" type="button">Windshield</button>
+          <button class="view-btn" data-view="dash" type="button">Dash</button>
+          <button class="view-btn" data-view="hood" type="button">Hood</button>
+        </div>
+
+        <div class="stats-grid">
+          <article class="stat-card"><span>Last</span><strong id="lastReaction">--</strong></article>
+          <article class="stat-card"><span>Best</span><strong id="bestReaction">--</strong></article>
+          <article class="stat-card"><span>Avg</span><strong id="avgReaction">--</strong></article>
+          <article class="stat-card"><span>Wins</span><strong id="winCount">0</strong></article>
+        </div>
+
+        <div class="opponent-bar-wrap">
+          <div class="opponent-meta"><span>Opponent light</span><strong id="opponentReaction">.---</strong></div>
+          <div class="race-bars">
+            <div class="bar-row"><span>You</span><div class="bar-track"><div class="bar-fill player-fill" id="playerBar"></div></div></div>
+            <div class="bar-row"><span>Other lane</span><div class="bar-track"><div class="bar-fill opponent-fill" id="opponentBar"></div></div></div>
+          </div>
+        </div>
+
+        <div class="tip-strip">
+          <span class="tip-label">Tip</span>
+          <p id="tipText">Fast lights are usually under .100. A foul means you left before green.</p>
+        </div>
+      </section>
+    </section>
+  </main>
+  <script src="script.js"></script>
+</body>
+</html>
